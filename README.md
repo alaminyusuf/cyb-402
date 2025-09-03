@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+# CYB 402 GroupAssignment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Group Members
 
-## Available Scripts
+Al-amin Yusuf Muhammad
+Bello Abdulrazak
+Ezikeil Ajayi Olabode
 
-In the project directory, you can run:
+## Modeling Fault Tolerance in a Distributed Application
 
-### `npm start`
+### Project Description
+In this mini-project, as Level 400 students of Cyber Security, you are to design a simple
+client-server or distributed application that demonstrates the concept of fault tolerance.
+The system should continue operating despite the introduction of certain faults.
+You are required to simulate different types of faults and apply any tolerance techniques
+to show how the system maintains reliability, a concept critical in building resilient and
+secure systems.
+### Project Objectives:
+The project specific objectives are as follows:
+1. To understand and model different types of system faults in computing systems.
+2. To demonstrate the impact of faults on security and system performance.
+3. To apply fault-tolerance techniques such as redundancy or replication for
+resilience.
+4. To document findings clearly with supporting evidence and relate them to cyber
+security contexts.
+### Scope of Work
+▪ Design a small application (can be in any programming language).
+▪ Introduce at least two types of faults (e.g., crash faults, omission faults).
+▪ Apply fault-tolerance techniques (e.g., redundancy, replication, or checkpoint
+recovery).
+▪ Demonstrate recovery through a short test run or screenshots.
+▪ Prepare a short report (3 to 5 pages) summarizing your design, methods, results
+and lessons learned.
+Deliverables (What to Submit)
+▪ Source code or simulation file.
+▪ Screenshots/outputs showing fault scenarios and recovery.
+▪ Final report (3 to 5 pages).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Group Size: Three (3) students per group. Grouping arrangements will be shared later.
+Submission Deadline: Tuesday 9th September, 2025.
+Submission Format: Hard copy report + soft copy (code/report) via
+salisu.abdul@gmail.com
