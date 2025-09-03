@@ -2,9 +2,9 @@
 
 ### Group Members
 
-Al-amin Yusuf Muhammad
-Bello Abdulrazak
-Ezikeil Ajayi Olabode
+1. Al-amin Yusuf Muhammad
+2. Bello Abdulrazak
+3. Ezikeil Ajayi Olabode
 
 ## Modeling Fault Tolerance in a Distributed Application
 
