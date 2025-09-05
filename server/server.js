@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const rateLimit = require('express-rate-limit')
 const connectDB = require('./db')
 const Transaction = require('./models/Transaction')
 
@@ -9,6 +10,14 @@ const PORT = process.env.PORT || 5000
 
 // Connect to the database
 connectDB()
+const apiLimiter = rateLimit({
+	windowMs: 1 * 60 * 1000, // 15 minutes
+	max: 5, // Limit each IP to 25 requests per windowMs
+	message:
+		'Too many requests from this IP, please try again after 15 minutes',
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
 
 // Middleware to parse JSON bodies
 app.use(express.json())
@@ -18,6 +27,8 @@ app.use(
 	})
 )
 app.use(cors({ origin: true }))
+// Apply to all requests
+app.use(apiLimiter)
 
 // --- API Routes ---
 
