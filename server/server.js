@@ -1,40 +1,20 @@
 require('dotenv').config()
 const express = require('express')
-const cors = require('cors')
-const rateLimit = require('express-rate-limit')
 const connectDB = require('./db')
 const Transaction = require('./models/Transaction')
+const cluster = require('cluster')
+const os = require('os')
+
+const numCPUs = os.cpus().length // Get the number of CPU cores
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Connect to the database
-connectDB()
-const apiLimiter = rateLimit({
-	windowMs: 1 * 60 * 1000, // 15 minutes
-	max: 5, // Limit each IP to 25 requests per windowMs
-	message:
-		'Too many requests from this IP, please try again after 15 minutes',
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-})
-
-// Middleware to parse JSON bodies
 app.use(express.json())
-app.use(
-	express.urlencoded({
-		extended: true,
-	})
-)
-app.use(cors({ origin: true }))
-// Apply to all requests
-app.use(apiLimiter)
 
-// --- API Routes ---
-
+// --- API Routes (Worker Process Only) ---
 // @route   GET /api/transactions
-// @desc    Get all transactions
-// @access  Public
+// ... (your existing GET, POST, PUT, DELETE routes go here) ...
 app.get('/api/transactions', async (req, res) => {
 	try {
 		const transactions = await Transaction.find().sort({ createdAt: -1 })
@@ -48,9 +28,6 @@ app.get('/api/transactions', async (req, res) => {
 	}
 })
 
-// @route   POST /api/transactions
-// @desc    Add a new transaction
-// @access  Public
 app.post('/api/transactions', async (req, res) => {
 	try {
 		const transaction = await Transaction.create(req.body)
@@ -110,7 +87,36 @@ app.delete('/api/transactions/:id', async (req, res) => {
 	}
 })
 
-// Start the server
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`)
+// A special route to test crashing a worker process
+app.get('/crash', (req, res) => {
+	res.status(200).send('Crashing worker process...')
+	process.exit(1) // Force an exit with a non-zero status code
 })
+
+if (cluster.isPrimary) {
+	// This is the master process
+	console.log(`Master process ${process.pid} is running`)
+
+	// Fork workers for each CPU core
+	for (let i = 0; i < numCPUs; i++) {
+		cluster.fork()
+	}
+
+	// Listen for workers exiting
+	cluster.on('exit', (worker, code, signal) => {
+		console.log(
+			`Worker process ${worker.process.pid} died. Code: ${code}, Signal: ${signal}`
+		)
+		console.log('Restarting a new worker...')
+		cluster.fork() // Fork a new worker to replace the dead one
+	})
+} else {
+	// This is a worker process
+	console.log(`Worker process ${process.pid} is running`)
+
+	// Connect to the database and start the Express server
+	connectDB()
+	app.listen(PORT, () => {
+		console.log(`Worker ${process.pid} listening on port ${PORT}`)
+	})
+}
