@@ -3,6 +3,8 @@ import './App.css'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Modal from 'react-modal'
+import axiosRetry from 'axios-retry'
+import { v4 as uuidv4 } from 'uuid'
 import {
 	CurrencyDollarIcon,
 	ArrowUpCircleIcon,
@@ -14,6 +16,21 @@ import { CurrencyDollarIcon as CurrencyDollarIconSolid } from '@heroicons/react/
 
 // Set up the modal root element
 Modal.setAppElement('#root')
+
+axiosRetry(axios, {
+	retries: 3, // Number of retry attempts
+	retryDelay: (retryCount) => {
+		// Exponential backoff strategy
+		return retryCount * 1000
+	},
+	retryCondition: (error) => {
+		// Retry on a timeout (omission fault) or server error
+		return (
+			axiosRetry.isNetworkError(error) ||
+			axiosRetry.isRetryableError(error)
+		)
+	},
+})
 
 const API_URL = 'http://localhost:5000/api/transactions'
 
@@ -63,7 +80,14 @@ const App = () => {
 						? -Math.abs(Number(formData.amount))
 						: Math.abs(Number(formData.amount)),
 			}
-			await axios.post(API_URL, newTransaction)
+			const config = {
+				headers: {
+					'X-Request-Id': uuidv4(),
+					// To emulate the fault: 'X-Emulate-Fault': 'omission'
+				},
+			}
+
+			await axios.post(API_URL, newTransaction, config)
 			setFormData({
 				description: '',
 				amount: '',
@@ -73,7 +97,7 @@ const App = () => {
 			fetchTransactions()
 		} catch (err) {
 			console.error('Error adding transaction:', err.response?.data || err)
-			setError('Failed to add transaction. Check your form data.')
+			setError('Failed to add transaction after multiple retries.')
 		}
 	}
 

@@ -20,6 +20,10 @@ const transactionSchema = new mongoose.Schema({
 		trim: true,
 		default: 'Uncategorized',
 	},
+	requestId: {
+		type: String,
+		unique: true,
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now,

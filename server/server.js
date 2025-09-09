@@ -29,18 +29,41 @@ app.get('/api/transactions', async (req, res) => {
 })
 
 app.post('/api/transactions', async (req, res) => {
+	// Simulate fail in frontend
+	if (req.headers['x-emulate-fault'] === 'omission') {
+		console.log('Emulating an omission fault: not sending a response.')
+		return // Don't send a response. The client will time out.
+	}
+
 	try {
-		const transaction = await Transaction.create(req.body)
-		res.status(201).json({ success: true, data: transaction })
+		// Check if this request has already been processed
+		const existingTransaction = await Transaction.findOne({ requestId })
+		if (existingTransaction) {
+			console.log(
+				'Duplicate request detected. Returning existing transaction.'
+			)
+			return res.status(200).json({
+				success: true,
+				data: existingTransaction,
+				message: 'Request already processed.',
+			})
+		}
+
+		// Process the new transaction, including the request ID
+		const newTransaction = await Transaction.create({
+			...req.body,
+			requestId,
+		})
+		res.status(201).json({ success: true, data: newTransaction })
 	} catch (error) {
-		if (error.name === 'ValidationError') {
+		if (error.name === 'ValidationError' || error.code === 11000) {
+			// 11000 is for unique key errors
 			const messages = Object.values(error.errors).map(
 				(val) => val.message
 			)
 			return res.status(400).json({ success: false, error: messages })
-		} else {
-			res.status(500).json({ success: false, error: 'Server Error' })
 		}
+		res.status(500).json({ success: false, error: 'Server Error' })
 	}
 })
 
